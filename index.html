@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Send+Flowers&display=swap" rel="stylesheet">
+  <title>Valentine Check</title>
+</head>
+<style>
+  * {
+    transition: all 0.2s ease-in-out;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    box-sizing: border-box;
+    overflow: hidden;
+    margin: 0;
+    background-color: black;
+    /* display: flex; */
+    /* justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+  }
+
+  .random {
+    position: absolute;
+  }
+
+  video {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    object-fit: cover;
+    filter: blur(3px) opacity(0.4);
+  }
+
+  button {
+    padding: 10px;
+    font-size: 25px;
+    border-radius: 15px;
+    background-color: pink;
+    color: white;
+    border: 3px solid white;
+    cursor: pointer;
+    width: 100px;
+  }
+
+  img {
+    width: 300px;
+    pointer-events: none;
+  }
+
+  .main {
+    /* border: 1px solid white; */
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .tooltip {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+
+  #overlay {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right bottom, #fe00ff, #ff00bd, #ff007e, #ff0047, #eb1212);
+    position: fixed;
+    z-index: 999;
+    /* Increased z-index */
+    top: 0;
+    left: 0;
+    display: none;
+  }
+
+  .active {
+    /* display: block; */
+    animation: fade-in 3s ease-in;
+  }
+
+  .fade {
+    animation: fade-out 3s linear;
+  }
+
+  @keyframes fade-in {
+    0% {
+      -webkit-clip-path: circle(0% at 50% 50%);
+      clip-path: circle(0% at 50% 50%);
+    }
+
+    100% {
+      -webkit-clip-path: circle(100.0% at 50% 50%);
+      clip-path: circle(100.0% at 50% 50%);
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+
+    25% {
+      opacity: 0.75;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+
+    75% {
+      opacity: 0.25;
+    }
+
+    100% {
+      opacity: 0;
+      /* display: none; */
+    }
+  }
+
+  /* @import url("https://fonts.googleapis.com/css2?family=Send+Flowers&display=swap"); */
+
+  svg {
+    font-family: "Send Flowers", sans-serif;
+    width: 100vh;
+    height: 100%;
+  }
+
+  svg text {
+    animation: stroke 5s infinite alternate;
+    stroke-width: 2;
+    stroke: #FF97CC;
+    font-size: 70px;
+  }
+
+  @keyframes stroke {
+    0% {
+      fill: rgba(227, 164, 197, 0);
+      stroke: rgba(255, 151, 204, 1);
+      stroke-dashoffset: 25%;
+      stroke-dasharray: 0 50%;
+      stroke-width: 2;
+    }
+
+    70% {
+      fill: rgba(227, 164, 197, 0);
+      stroke: rgba(255, 151, 204, 1);
+    }
+
+    80% {
+      fill: rgba(227, 164, 197, 0);
+      stroke: rgba(255, 151, 204, 1);
+      stroke-width: 3;
+    }
+
+    100% {
+      fill: rgba(227, 164, 197, 1);
+      stroke: rgba(255, 151, 204, 0);
+      stroke-dashoffset: -25%;
+      stroke-dasharray: 50% 0;
+      stroke-width: 0;
+    }
+  }
+
+  .wrapper {
+    background-color: transparent;
+  }
+
+  @media (max-width: 767px) {
+    svg text {
+      font-size: 40px;
+    }
+
+    svg {
+      /* border: 1px solid white; */
+      width: 60vh;
+    }
+  }
+
+  @media (max-width: 400px) {
+    svg {
+      width: 47vh;
+    }
+
+    svg text {
+      font-size: 33px;
+    }
+  }
+
+  footer {
+    /* border: 1px solid white; */
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    z-index: 500;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+  }
+
+  footer h3 {
+    opacity: 0.65;
+    color: white;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-weight: 100;
+  }
+</style>
+
+<body>
+  <div id="overlay"></div>
+  <video autoplay muted loop src="Heart Background.mp4"></video>
+  <div class="main">
+    <div class="wrapper">
+      <svg>
+        <text x="50%" y="50%" dy=".35em" text-anchor="middle">
+          Will You be My valentine
+        </text>
+      </svg>
+    </div>
+    <img src="flower-gentleman-unscreen.gif" alt="">
+    <div class="decision">
+      <button id="yes">Yes</button>
+      <button id="no">No</button>
+    </div>
+  </div>
+  <footer>
+    <h3>Made With ❤️ || @gearhax_yt</h3>
+  </footer>
+  <script>
+    const gifs = ['gifs/khanov1 (1)', 'gifs/khanov1', 'gifs/mochi-mochi-cat', 'gifs/mochi-peachcat-cute-cat', 'gifs/kiss', 'gifs/piffle-cute', 'gifs/jump-up', 'gifs/milk-and-mocha-bear-hearts'];
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    const wrapperText = document.getElementsByTagName("text")[0];
+    const overlay = document.getElementById("overlay")
+    const no = document.getElementById('no');
+    const yes = document.getElementById('yes');
+
+    // Function to select a random GIF and update the image source
+    function updateRandomGif() {
+      const randomIndex = Math.floor(Math.random() * gifs.length);
+      const randomGIF = gifs[randomIndex];
+      document.querySelector('img').src = randomGIF + '.gif'; // Update the src
+    }
+
+    yes.addEventListener('click', async () => {
+      style();
+      setTimeout(() => {
+        document.getElementsByTagName("video")[0].src = "moving hearts background.mp4"
+        yes.style.display = "none";
+        no.style.display = "none";
+        if (document.querySelector('.tooltip')) {
+          document.querySelector('.tooltip').remove(); // Remove tooltip if exists
+        }
+        wrapperText.textContent = "'❤️'";
+      }, 3000);
+      // Update the GIF every 3 seconds
+      setInterval(updateRandomGif, 3000);
+    });
+
+    let tooltipTimeout;
+
+    function style() {
+      overlay.style.display = 'block';
+      overlay.classList.add("active")
+      setTimeout(() => {
+        overlay.classList.add("fade")
+      }, 3000);
+      setTimeout(() => {
+        overlay.style.display = "none";
+      }, 6000);
+    }
+    function getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function setRandomPosition(event) {
+      if (event.type === 'mouseenter') {
+        const tooltip = document.createElement('div');
+        tooltip.textContent = 'Please say yes 🥹';
+        tooltip.classList.add('tooltip');
+        document.body.appendChild(tooltip);
+        const rect = no.getBoundingClientRect();
+        const x = rect.left + (rect.width - tooltip.offsetWidth) / 2;
+        const y = rect.top - tooltip.offsetHeight - 10;
+        tooltip.style.left = x + 'px';
+        tooltip.style.top = y + 'px';
+        tooltipTimeout = setTimeout(() => {
+          tooltip.remove();
+        }, 2000);
+      } else {
+        clearTimeout(tooltipTimeout);
+      }
+      no.classList.add("random");
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const elementWidth = no.offsetWidth;
+      const elementHeight = no.offsetHeight;
+
+      const randomX = getRandomNumber(0, windowWidth - elementWidth);
+      const randomY = getRandomNumber(0, windowHeight - elementHeight);
+
+      no.style.left = randomX + 'px';
+      no.style.top = randomY + 'px';
+    }
+
+    no.addEventListener('mouseenter', setRandomPosition);
+    no.addEventListener('click', setRandomPosition);
+    no.addEventListener('mouseleave', setRandomPosition);
+  </script>
+</body>
+
+</html>
